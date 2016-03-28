@@ -2,8 +2,8 @@
 .MODEL FLAT, C
 
 .DATA
-a DW 5 ;first value
-b DW 5 ;second value
+a DD 5 ;first value
+b DD 5 ;second value
 
 .CODE
 
@@ -15,12 +15,9 @@ MAIN PROC
 	mov eax, eax
 MAIN ENDP
 
-;TODO: make it work
-
 ADDITION PROC
 	push ebp
 	mov ebp, esp
-	push eax
 	push ebx
 
 	mov eax, [ebp+8]
