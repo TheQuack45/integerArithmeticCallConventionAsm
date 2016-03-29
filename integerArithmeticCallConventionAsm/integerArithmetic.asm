@@ -5,7 +5,7 @@
 a DD 5 ;first value
 b DD 5 ;second value
 
-switch DB 3 ;set to 0 if addition, 1 if subtraction, 2 if multiplication, 3 if division
+switch DB 4 ;set to 0 if addition, 1 if subtraction, 2 if multiplication, 3 if division, 4 if exponentiation
 
 .CODE
 
@@ -22,6 +22,7 @@ MAIN PROC
 
 	cmp switch, 4
 	jl diviExec
+	je exponExec
 
 	addExec:
 		call ADDITION
@@ -37,6 +38,10 @@ MAIN PROC
 
 	diviExec:
 		call DIVISION
+		jmp endSect
+
+	exponExec:
+		call EXPONENTIATION
 		jmp endSect
 
 	endSect:
@@ -115,5 +120,28 @@ DIVISION PROC
 	pop ebp
 	ret
 DIVISION ENDP
+
+EXPONENTIATION PROC
+	push ebp
+	mov ebp, esp
+	push ebx
+	push ecx
+
+	mov ecx, b
+	dec ecx
+	push a
+	push a
+	expon:
+		call MULTIPLICATION
+		push a
+		push eax
+		loop expon
+
+	pop ecx
+	pop ebx
+	mov esp, ebp
+	pop ebp
+	ret
+EXPONENTIATION ENDP
 
 END
