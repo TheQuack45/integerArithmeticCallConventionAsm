@@ -2,10 +2,10 @@
 .MODEL FLAT, C
 
 .DATA
-a DD 5 ;first value
-b DD 5 ;second value
+a DD 10 ;first value
+b DD 4 ;second value
 
-switch DB 4 ;set to 0 if addition, 1 if subtraction, 2 if multiplication, 3 if division, 4 if exponentiation
+switch DB 5 ;set to 0 if addition, 1 if subtraction, 2 if multiplication, 3 if division, 4 if exponentiation, 5 if modulo
 
 .CODE
 
@@ -23,6 +23,7 @@ MAIN PROC
 	cmp switch, 4
 	jl diviExec
 	je exponExec
+	jg moduExec
 
 	addExec:
 		call ADDITION
@@ -42,6 +43,10 @@ MAIN PROC
 
 	exponExec:
 		call EXPONENTIATION
+		jmp endSect
+
+	moduExec:
+		call MODULO
 		jmp endSect
 
 	endSect:
@@ -143,5 +148,24 @@ EXPONENTIATION PROC
 	pop ebp
 	ret
 EXPONENTIATION ENDP
+
+MODULO PROC
+	push ebp
+	mov ebp, esp
+	push ebx
+
+	mov eax, [ebp+8]
+	mov ebx, [ebp+12]
+	modu:
+		sub eax, ebx
+		cmp eax, 0
+		jg modu
+	neg eax
+
+	pop ebx
+	mov esp, ebp
+	pop ebp
+	ret
+MODULO ENDP
 
 END
