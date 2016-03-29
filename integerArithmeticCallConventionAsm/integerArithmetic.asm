@@ -5,7 +5,7 @@
 a DD 5 ;first value
 b DD 5 ;second value
 
-switch DB 2 ;set to 0 if addition, 1 if subtraction, 2 if multiplication
+switch DB 3 ;set to 0 if addition, 1 if subtraction, 2 if multiplication, 3 if division
 
 .CODE
 
@@ -20,6 +20,9 @@ MAIN PROC
 	jl subExec
 	je multiExec
 
+	cmp switch, 4
+	jl diviExec
+
 	addExec:
 		call ADDITION
 		jmp endSect
@@ -30,6 +33,10 @@ MAIN PROC
 
 	multiExec:
 		call MULTIPLICATION
+		jmp endSect
+
+	diviExec:
+		call DIVISION
 		jmp endSect
 
 	endSect:
@@ -85,5 +92,28 @@ MULTIPLICATION PROC
 	pop ebp
 	ret
 MULTIPLICATION ENDP
+
+DIVISION PROC
+	push ebp
+	mov ebp, esp
+	push ebx
+	push ecx
+
+	mov eax, [ebp+8]
+	mov ebx, [ebp+12]
+	mov ecx, 0
+	divi:
+		sub eax, ebx
+		inc ecx
+		cmp eax, 0
+		jg divi
+	mov eax, ecx
+
+	pop ecx
+	pop ebx
+	mov esp, ebp
+	pop ebp
+	ret
+DIVISION ENDP
 
 END
